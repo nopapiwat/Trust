@@ -7,6 +7,7 @@ var GameLayer = cc.LayerColor.extend({
 
 	this.ring = new Ring();
 	this.addChild(this.ring);
+	this.ring.setLimit(800,600);
 	this.ring.scheduleUpdate();
 
         return true;
