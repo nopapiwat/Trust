@@ -1,6 +1,6 @@
 var GameLayer = cc.LayerColor.extend({
     init: function() {
-        this._super( new cc.Color4B( 127, 127, 127, 255 ) );
+        this._super( new cc.Color4B( 255, 255, 255, 255 ) );
         this.setPosition( new cc.Point( 0, 0 ) );
 	this.setKeyboardEnabled(true);
 	this.scheduleUpdate();
@@ -10,6 +10,14 @@ var GameLayer = cc.LayerColor.extend({
 	this.ring.setLimit(800,600);
 	this.ring.scheduleUpdate();
 
+	this.ball = new Ball();
+	this.addChild(this.ball);
+	this.ball.setPosition(new cc.Point(200,200));
+
+	this.ball2 = new Ball();
+	this.addChild(this.ball2);
+	this.ball2.setPosition(new cc.Point(700,500));
+	this.ball2.changeColor();
         return true;
     },
 
