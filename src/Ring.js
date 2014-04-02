@@ -2,11 +2,13 @@ var Ring = cc.Sprite.extend({
 	ctor: function(x,y){
 		this._super();
 		this.initWithFile('Images/ring.png');
+		this.sizeX = 35;
+		this.sizeY = 54;
 
 		this.x = 400;
 		this.y = 300;
 		this.state = Ring.STATE.STOP;
-		this.velocity = 1;
+		this.velocity = 20;
 		this.limitX = 100;
 		this.limitY = 100;
 
@@ -37,32 +39,38 @@ var Ring = cc.Sprite.extend({
 			default:
 				break;
 		}
-		if(!bool) this.velocity/=2;
+	},
+
+	isMoving: function(){
+		return this.left||this.right||this.up||this.down;	
+	},
+
+	move: function(){
+    		if(this.left){
+		       	this.x-=this.velocity;
+			if(this.x<this.sizeX) this.x = this.sizeX;
+		}			
+		if(this.right) {
+			this.x+=this.velocity;	
+			if(this.x>this.limitX-this.sizeX) this.x = this.limitX-this.sizeX;
+		}
+		if(this.up){			       	
+			this.y+=this.velocity;
+			if(this.y>this.limitY-this.sizeY) this.y = this.limitY-this.sizeY;
+		
+		}
+		if(this.down) {
+			this.y-=this.velocity;
+			if(this.y<this.sizeY) this.y = this.sizeY;
+		}	
 	},
 
 	update: function(){
-		if(this.left||this.right||this.up||this.down){
+		if(this.isMoving()){
 			this.stage = Ring.STATE.RUNNING;
-			this.velocity+=0.5;
-    			if(this.left){
-			       	this.x-=this.velocity;
-				if(this.x<35) this.x = 35;
-			}
-			if(this.right) {
-				this.x+=this.velocity;
-				if(this.x>this.limitX-35) this.x = this.limitX-35;
-			}
-			if(this.up){
-			       	this.y+=this.velocity;
-				if(this.y>this.limitY-54) this.y = this.limitY-54;
-			}
-			if(this.down) {
-				this.y-=this.velocity;
-				if(this.y<54) this.y = 54;
-			}
+			this.move();
 		}else{
 			this.stage = Ring.STATE.STOP;
-			this.velocity = 1;
 		}
     	}
 
