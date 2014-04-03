@@ -1,6 +1,6 @@
 var GameLayer = cc.LayerColor.extend({
     init: function() {
-        this._super( new cc.Color4B( 255, 255, 255, 255 ) );
+        this._super( new cc.Color4B( 0, 0, 0, 255 ) );
         this.setPosition( new cc.Point( 0, 0 ) );
 	this.setKeyboardEnabled(true);
 	this.scheduleUpdate();
@@ -10,14 +10,7 @@ var GameLayer = cc.LayerColor.extend({
 	this.ring.setLimit(800,600);
 	this.ring.scheduleUpdate();
 
-	this.ball = new Ball();
-	this.addChild(this.ball);
-	this.ball.setPosition(new cc.Point(200,200));
-
-	this.ball2 = new Ball();
-	this.addChild(this.ball2);
-	this.ball2.setPosition(new cc.Point(700,500));
-	this.ball2.changeColor();
+	this.count = 0;
         return true;
     },
 
@@ -51,8 +44,21 @@ var GameLayer = cc.LayerColor.extend({
     	this.manageKey(e,false);
     },
 
+    checkCatching: function(ball){
+	    var posBall = ball.getPosition();
+	    var posRing = this.ring.getPosition();
+    	if(Math.abs(posBall.x-posRing.x)<=50&&Math.abs(posBall.y-posRing.y)<=50)
+		this.removeChild(ball);
+    },
+
     update: function(dt){
+	if(this.count%100==0){
+		var ball = new Ball();
+		this.addChild(ball);
+		ball.setScreen(this);
+	}
    	this.ring.setPosition(new cc.Point(this.ring.x,this.ring.y));
+	this.count+=1;
     }
 
 });
