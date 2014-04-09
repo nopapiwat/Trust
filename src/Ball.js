@@ -11,6 +11,7 @@ var Ball = cc.Sprite.extend({
 		this.state = Ball.STATE.RED;
 		this.action = this.redAction;
 		this.runAction(this.action);
+		this.velocity = 10;
 
 		this.scheduleUpdate();
 	},
@@ -51,20 +52,22 @@ var Ball = cc.Sprite.extend({
 	},
 
 	move: function(){
-		if(this.dirX==-1) this.x-=10;
-		else this.x+=10;
-		if(this.dirY==-1) this.y-=10;
-		else this.y+=10;
+		if(this.dirX==-1) this.x-=this.velocity;
+		else this.x+=this.velocity;
+		if(this.dirY==-1) this.y-=this.velocity;
+		else this.y+=this.velocity;
 	},
 
 	checkReflect: function(){
 		if(this.x<=0 || this.x>=800) {
 			this.dirX*=-1;
 			this.changeColor();
+			this.velocity+=0.1;
 		}
 		if(this.y<=0 || this.y>=600) {
 			this.dirY*=-1;
 			this.changeColor();
+			this.velocity+=0.1;
 		}
 	},
 
