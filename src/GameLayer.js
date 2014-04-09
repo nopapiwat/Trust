@@ -1,6 +1,6 @@
 var GameLayer = cc.LayerColor.extend({
     init: function() {
-        this._super( new cc.Color4B( 0, 0, 0, 255 ) );
+        this._super( new cc.Color4B( 127, 127, 127, 255 ) );
         this.setPosition( new cc.Point( 0, 0 ) );
 	this.setKeyboardEnabled(true);
 	this.scheduleUpdate();
@@ -47,8 +47,10 @@ var GameLayer = cc.LayerColor.extend({
     checkCatching: function(ball){
 	    var posBall = ball.getPosition();
 	    var posRing = this.ring.getPosition();
-    	if(Math.abs(posBall.x-posRing.x)<=50&&Math.abs(posBall.y-posRing.y)<=50)
-		this.removeChild(ball);
+    	if(Math.abs(posBall.x-posRing.x)<=50&&Math.abs(posBall.y-posRing.y)<=50){
+		if(ball.state == Ball.STATE.BLUE)
+			this.removeChild(ball);
+	}
     },
 
     update: function(dt){
