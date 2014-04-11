@@ -11,7 +11,7 @@ var Ball = cc.Sprite.extend({
 		this.state = Ball.STATE.RED;
 		this.action = this.redAction;
 		this.runAction(this.action);
-		this.velocity = 10;
+		this.velocity = 1;
 
 		this.scheduleUpdate();
 	},
@@ -40,8 +40,8 @@ var Ball = cc.Sprite.extend({
 	},
 
 	randomPos: function(){
-		this.x = Math.random()*800;
-		this.y = Math.random()*600;
+		this.x = Math.random()*750;
+		this.y = Math.random()*550;
 	},
 
 	randomDir: function(){
@@ -58,17 +58,18 @@ var Ball = cc.Sprite.extend({
 		else this.y+=this.velocity;
 	},
 
+	checkAxisReflect: function(axis,dir,maxLimit){
+		if(axis <= 0 || axis >= maxLimit){
+			dir*=-1;
+			this.changeColor();
+			this.velocity+=0.1;
+		}
+		return dir;
+	},
+
 	checkReflect: function(){
-		if(this.x<=0 || this.x>=800) {
-			this.dirX*=-1;
-			this.changeColor();
-			this.velocity+=0.1;
-		}
-		if(this.y<=0 || this.y>=600) {
-			this.dirY*=-1;
-			this.changeColor();
-			this.velocity+=0.1;
-		}
+		this.dirX = this.checkAxisReflect(this.x,this.dirX,750);	
+		this.dirY = this.checkAxisReflect(this.y,this.dirY,550);
 	},
 
 	checkScreen: function(){

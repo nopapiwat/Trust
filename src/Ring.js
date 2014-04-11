@@ -6,7 +6,7 @@ var Ring = cc.Sprite.extend({
 		this.sizeY = 54;
 
 		this.x = 400;
-		this.y = 300;
+		this.y = 0;
 		this.state = Ring.STATE.STOP;
 		this.velocity = 20;
 		this.limitX = 100;

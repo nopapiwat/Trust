@@ -45,12 +45,16 @@ var GameLayer = cc.LayerColor.extend({
     },
 
     checkCatching: function(ball){
-	    var posBall = ball.getPosition();
+	    /*var posBall = ball.getPosition();
 	    var posRing = this.ring.getPosition();
-    	if(Math.abs(posBall.x-posRing.x)<=50&&Math.abs(posBall.y-posRing.y)<=50){
+    	if(Math.abs(posBall.x-posRing.x)<=50 && Math.abs(posBall.y-posRing.y)<=100){
 		if(ball.state == Ball.STATE.BLUE)
 			this.removeChild(ball);
-	}
+	}*/
+	    var ballRect = ball.getBoundingBoxToWorld();
+	    var ringRect = this.ring.getBoundingBoxToWorld();
+	    if( cc.rectIntersectsRect(ballRect,ringRect) )
+		    this.removeChild(ball);
     },
 
     update: function(dt){
@@ -58,6 +62,7 @@ var GameLayer = cc.LayerColor.extend({
 		var ball = new Ball();
 		this.addChild(ball);
 		ball.setScreen(this);
+		this.count-=100;
 	}
    	this.ring.setPosition(new cc.Point(this.ring.x,this.ring.y));
 	this.count+=1;
