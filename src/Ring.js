@@ -6,7 +6,7 @@ var Ring = cc.Sprite.extend({
 		this.sizeY = 54;
 
 		this.x = 400;
-		this.y = 0;
+		this.y = 300;
 		this.state = Ring.STATE.STOP;
 		this.velocity = 20;
 		this.limitX = 100;
@@ -45,24 +45,27 @@ var Ring = cc.Sprite.extend({
 		return this.left||this.right||this.up||this.down;	
 	},
 
+	checkLimit: function(axis,max,min){
+		if(axis>max) return max;
+		if(axis<min) return min;
+		return axis;
+	},
+
 	move: function(){
     		if(this.left){
 		       	this.x-=this.velocity;
-			if(this.x<this.sizeX) this.x = this.sizeX;
 		}			
 		if(this.right) {
 			this.x+=this.velocity;	
-			if(this.x>this.limitX-this.sizeX) this.x = this.limitX-this.sizeX;
 		}
 		if(this.up){			       	
 			this.y+=this.velocity;
-			if(this.y>this.limitY-this.sizeY) this.y = this.limitY-this.sizeY;
-		
 		}
 		if(this.down) {
 			this.y-=this.velocity;
-			if(this.y<this.sizeY) this.y = this.sizeY;
-		}	
+		}
+		this.x = this.checkLimit(this.x,this.limitX-this.sizeX,this.sizeX);
+		this.y = this.checkLimit(this.y,this.limitY-this.sizeY,this.sizeY);
 	},
 
 	update: function(){

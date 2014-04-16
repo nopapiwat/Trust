@@ -11,7 +11,7 @@ var Ball = cc.Sprite.extend({
 		this.state = Ball.STATE.RED;
 		this.action = this.redAction;
 		this.runAction(this.action);
-		this.velocity = 1;
+		this.velocity = 5;
 
 		this.scheduleUpdate();
 	},

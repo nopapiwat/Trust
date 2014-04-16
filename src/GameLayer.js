@@ -57,15 +57,19 @@ var GameLayer = cc.LayerColor.extend({
 		    this.removeChild(ball);
     },
 
-    update: function(dt){
+   checkBallCreation: function(){
 	if(this.count%100==0){
 		var ball = new Ball();
 		this.addChild(ball);
 		ball.setScreen(this);
 		this.count-=100;
 	}
-   	this.ring.setPosition(new cc.Point(this.ring.x,this.ring.y));
 	this.count+=1;
+    },
+
+    update: function(dt){
+	this.checkBallCreation();
+   	this.ring.setPosition(new cc.Point(this.ring.x,this.ring.y));
     }
 
 });
