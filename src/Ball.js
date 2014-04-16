@@ -41,7 +41,7 @@ var Ball = cc.Sprite.extend({
 
 	randomPos: function(){
 		this.x = Math.random()*750;
-		this.y = Math.random()*550;
+		this.y = parseInt(Math.random())*550;
 	},
 
 	randomDir: function(){
