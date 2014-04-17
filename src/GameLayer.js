@@ -15,6 +15,11 @@ var GameLayer = cc.LayerColor.extend({
 	this.scoreLabel.setPosition(new cc.Point(700,500));
 	this.addChild(this.scoreLabel);
 
+	this.life = 3;
+	this.lifeLabel = cc.LabelTTF.create('3','Arial',32);
+	this.lifeLabel.setPosition(new cc.Point(100,500));
+	this.addChild(this.lifeLabel);
+
 	this.count = 0;
         return true;
     },
@@ -53,10 +58,9 @@ var GameLayer = cc.LayerColor.extend({
 	var ballRect = ball.getBoundingBoxToWorld();
 	var ringRect = this.ring.getBoundingBoxToWorld();
 	if( cc.rectIntersectsRect(ballRect,ringRect) ){
-	    if(ball.state == Ball.STATE.BLUE){
-	    	this.removeChild(ball);
-		this.score+=100;
-	    }
+	    if(ball.state == Ball.STATE.BLUE) this.score+=100;
+	    else this.life-=1;
+	    this.removeChild(ball);
    	}
     },
 
@@ -71,13 +75,23 @@ var GameLayer = cc.LayerColor.extend({
     },
 
    gameOver: function(){
-   
+  	var conf = confirm("GAME OVER\nYour score : "+this.score+"\nRetry?");
+	if(conf) location.reload();
+	else this.end();
+	return;
+   },
+
+   end: function(){
+   	this.unscheduleUpdate();	
    },
 
     update: function(dt){
 	this.checkBallCreation();
    	this.ring.setPosition(new cc.Point(this.ring.x,this.ring.y));
 	this.scoreLabel.setString(this.score);
+	this.lifeLabel.setString(this.life);
+
+	if(this.life == 0) this.gameOver();
     }
 
 });
