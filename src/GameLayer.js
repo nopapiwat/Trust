@@ -3,11 +3,13 @@ var GameLayer = cc.LayerColor.extend({
         this._super( new cc.Color4B( 127, 127, 127, 255 ) );
         this.setPosition( new cc.Point( 0, 0 ) );
 	this.setKeyboardEnabled(true);
+	this.setMouseEnabled(true);
 	this.scheduleUpdate();
 
 	this.ring = new Ring();
 	this.addChild(this.ring);
 	this.ring.setLimit(800,600);
+	this.ring.setPosition(400,300);
 	this.ring.scheduleUpdate();
 
 	this.score = 0;
@@ -22,6 +24,17 @@ var GameLayer = cc.LayerColor.extend({
 
 	this.count = 0;
         return true;
+    },
+
+    /*onMouseMoved: function(event){
+	    var pos = event.getPosition();
+	    this.ring.setPosition(new cc.Point(pos.x,pos.y));
+	    console.log(pos.x+" "+pos.y);
+	    return true;
+    },*/
+
+    onMouseMoved: function(event){
+    	this.ring.handleMouseMoved(event.getLocation());
     },
 
     manageKey: function(key,bool){
@@ -85,7 +98,7 @@ var GameLayer = cc.LayerColor.extend({
    	this.unscheduleUpdate();	
    },
 
-    update: function(dt){
+   update: function(dt){
 	this.checkBallCreation();
    	this.ring.setPosition(new cc.Point(this.ring.x,this.ring.y));
 	this.scoreLabel.setString(this.score);

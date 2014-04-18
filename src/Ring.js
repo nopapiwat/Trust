@@ -68,13 +68,20 @@ var Ring = cc.Sprite.extend({
 		this.y = this.checkLimit(this.y,this.limitY-this.sizeY,this.sizeY);
 	},
 
+	handleMouseMoved: function(touchLocation){
+		//console.log(touchLocation.x);
+		//console.log(touchLocation.y);
+		this.x = touchLocation.x;
+		this.y = touchLocation.y;
+	},
+
 	update: function(){
-		if(this.isMoving()){
+		/*if(this.isMoving()){
 			this.stage = Ring.STATE.RUNNING;
-			this.move();
+			//this.move();
 		}else{
 			this.stage = Ring.STATE.STOP;
-		}
+		}*/
     	}
 
 });
