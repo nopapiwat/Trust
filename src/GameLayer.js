@@ -17,21 +17,28 @@ var GameLayer = cc.LayerColor.extend({
 	this.scoreLabel.setPosition(new cc.Point(700,500));
 	this.addChild(this.scoreLabel);
 
-	this.life = 3;
-	this.lifeLabel = cc.LabelTTF.create('3','Arial',32);
-	this.lifeLabel.setPosition(new cc.Point(100,500));
-	this.addChild(this.lifeLabel);
+	this.createLifes();
 
 	this.count = 0;
         return true;
     },
 
-    /*onMouseMoved: function(event){
-	    var pos = event.getPosition();
-	    this.ring.setPosition(new cc.Point(pos.x,pos.y));
-	    console.log(pos.x+" "+pos.y);
-	    return true;
-    },*/
+    createLifes: function(){
+    	this.life = 3;
+	this.lifes = [];
+	for(var i = 1; i <= this.life; i++){
+		var lifeImage = new Life();
+		lifeImage.setPosition(new cc.Point(i*60,500));
+		this.lifes.push(lifeImage);
+		this.addChild(lifeImage);
+	}
+    },
+
+    decreaseLifes: function(){
+    	var lifeImage = this.lifes.pop();
+	this.removeChild(lifeImage);
+	this.life-=1;
+    },
 
     onMouseMoved: function(event){
     	this.ring.handleMouseMoved(event.getLocation());
@@ -72,17 +79,17 @@ var GameLayer = cc.LayerColor.extend({
 	var ringRect = this.ring.getBoundingBoxToWorld();
 	if( cc.rectIntersectsRect(ballRect,ringRect) ){
 	    if(ball.state == Ball.STATE.BLUE) this.score+=100;
-	    else this.life-=1;
+	    else this.decreaseLifes();
 	    this.removeChild(ball);
    	}
     },
 
    checkBallCreation: function(){
-	if(this.count%100==0){
+	if(this.count%50==0){
 		var ball = new Ball();
 		this.addChild(ball);
 		ball.setScreen(this);
-		this.count-=100;
+		this.count-=50;
 	}
 	this.count+=1;
     },
@@ -102,9 +109,8 @@ var GameLayer = cc.LayerColor.extend({
 	this.checkBallCreation();
    	this.ring.setPosition(new cc.Point(this.ring.x,this.ring.y));
 	this.scoreLabel.setString(this.score);
-	this.lifeLabel.setString(this.life);
-
 	if(this.life == 0) this.gameOver();
+
     }
 
 });

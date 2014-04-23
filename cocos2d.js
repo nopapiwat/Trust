@@ -14,7 +14,8 @@
         appFiles:[
             'src/GameLayer.js',     //add your own files in order here
 		'src/Ring.js',
-		'src/Ball.js'
+		'src/Ball.js',
+		'src/Life.js'
 	
         ]
     };
