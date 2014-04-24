@@ -16,6 +16,10 @@ var GameLayer = cc.LayerColor.extend({
 	this.scoreLabel = cc.LabelTTF.create('0','Arial',32);
 	this.scoreLabel.setPosition(new cc.Point(700,500));
 	this.addChild(this.scoreLabel);
+	this.combo = 0;
+	this.comboLabel = cc.LabelTTF.create('0','Arial',32);
+	this.comboLabel.setPosition(new cc.Point(400,500));
+	this.addChild(this.comboLabel);
 
 	this.createLifes();
 
@@ -77,9 +81,17 @@ var GameLayer = cc.LayerColor.extend({
 	var ballRect = ball.getBoundingBoxToWorld();
 	var ringRect = this.ring.getBoundingBoxToWorld();
 	if( cc.rectIntersectsRect(ballRect,ringRect) ){
-	    if(ball.state == Ball.STATE.BLUE) this.score+=ball.getScore();
-	    else this.decreaseLifes();
+	    if(ball.state == Ball.STATE.BLUE) {
+		    this.score+=ball.getScore();
+		    this.score+=this.combo*20;
+		    this.combo+=1;
+	    }
+	    else {
+		    this.decreaseLifes();
+		    this.combo = 0;
+	    }
 	    this.removeChild(ball);
+	    this.comboLabel.setString(this.combo);
    	}
     },
 
