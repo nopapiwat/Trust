@@ -77,7 +77,7 @@ var GameLayer = cc.LayerColor.extend({
 	var ballRect = ball.getBoundingBoxToWorld();
 	var ringRect = this.ring.getBoundingBoxToWorld();
 	if( cc.rectIntersectsRect(ballRect,ringRect) ){
-	    if(ball.state == Ball.STATE.BLUE) this.score+=100;
+	    if(ball.state == Ball.STATE.BLUE) this.score+=ball.getScore();
 	    else this.decreaseLifes();
 	    this.removeChild(ball);
    	}

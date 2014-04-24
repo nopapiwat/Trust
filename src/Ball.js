@@ -11,9 +11,14 @@ var Ball = cc.Sprite.extend({
 		this.state = Ball.STATE.RED;
 		this.action = this.redAction;
 		this.runAction(this.action);
-		this.velocity = 8;
+		this.velocity = 5;
+		this.score = 100;
 
 		this.scheduleUpdate();
+	},
+
+    	getScore: function(){
+		return this.score;
 	},
 
     	changeColor: function(){
@@ -62,7 +67,8 @@ var Ball = cc.Sprite.extend({
 		if(axis <= 0 || axis >= maxLimit){
 			dir*=-1;
 			this.changeColor();
-			this.velocity+=0.1;
+			this.velocity+=0.2;
+			this.score+=50;
 		}
 		return dir;
 	},
