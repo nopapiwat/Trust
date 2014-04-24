@@ -12,29 +12,21 @@ var Ring = cc.Sprite.extend({
 		this.limitX = 100;
 		this.limitY = 100;
 
-		this.left = false;
-		this.up = false;
-		this.right = false;
-		this.down = false;
+		this.dirX = 0;
+		this.dirY = 0;
 	},
     	setLimit: function(x,y){
 		this.limitX = x;
 		this.limitY = y;
 	},
 
-    	setDirection: function(dir,bool){
+    	setDirection: function(dir,value){
 		switch (dir){
-			case "left":
-				this.left = bool;
+			case "X":
+				this.dirX = value;
 				break;
-			case "right":
-				this.right = bool;
-				break;
-			case "up":
-				this.up = bool;
-				break;
-			case "down":
-				this.down = bool;
+			case "Y":
+				this.dirY = value;
 				break;
 			default:
 				break;
@@ -42,7 +34,7 @@ var Ring = cc.Sprite.extend({
 	},
 
 	isMoving: function(){
-		return this.left||this.right||this.up||this.down;	
+		return this.dirX || this.dirY;	
 	},
 
 	checkLimit: function(axis,max,min){
@@ -52,36 +44,28 @@ var Ring = cc.Sprite.extend({
 	},
 
 	move: function(){
-    		if(this.left){
-		       	this.x-=this.velocity;
-		}			
-		if(this.right) {
-			this.x+=this.velocity;	
-		}
-		if(this.up){			       	
-			this.y+=this.velocity;
-		}
-		if(this.down) {
-			this.y-=this.velocity;
-		}
+    		this.x += this.dirX*this.velocity;
+		this.y += this.dirY*this.velocity;
 		this.x = this.checkLimit(this.x,this.limitX-this.sizeX,this.sizeX);
 		this.y = this.checkLimit(this.y,this.limitY-this.sizeY,this.sizeY);
 	},
 
 	handleMouseMoved: function(touchLocation){
-		//console.log(touchLocation.x);
-		//console.log(touchLocation.y);
+		this.stage = Ring.STATE.STOP;
+		this.dirX = 0;
+		this.dirY = 0;
 		this.x = touchLocation.x;
 		this.y = touchLocation.y;
+		this.move();
 	},
 
 	update: function(){
-		/*if(this.isMoving()){
+		if(this.isMoving()){
 			this.stage = Ring.STATE.RUNNING;
-			//this.move();
+			this.move();
 		}else{
 			this.stage = Ring.STATE.STOP;
-		}*/
+		}
     	}
 
 });

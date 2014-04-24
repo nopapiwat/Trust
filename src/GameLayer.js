@@ -44,34 +44,33 @@ var GameLayer = cc.LayerColor.extend({
     	this.ring.handleMouseMoved(event.getLocation());
     },
 
-    manageKey: function(key,bool){
+    manageKey: function(key,value){
 	    var tmp;
 	    switch(key){
 		case cc.KEY.left:
-			tmp = "left";
-			break;
 		case cc.KEY.right:
-			tmp = "right";
+			tmp = "X";
+			if (key == cc.KEY.left && value!=0) value = -1;
 			break;
 		case cc.KEY.up:
-			tmp = "up";
-			break;
 		case cc.KEY.down:
-			tmp = "down";
+			tmp = "Y";
+			if (key == cc.KEY.down && value!=0) value = -1;
 			break;
 		default:
 			break;
 	    }
-	    this.ring.setDirection(tmp,bool);
+
+	    this.ring.setDirection(tmp,value);
 
     },
 
     onKeyDown: function(e){
-    	this.manageKey(e,true);
+    	this.manageKey(e,1);
     },
 
     onKeyUp: function(e){
-    	this.manageKey(e,false);
+    	this.manageKey(e,0);
     },
 
     checkCatching: function(ball){
@@ -109,7 +108,7 @@ var GameLayer = cc.LayerColor.extend({
 	this.checkBallCreation();
    	this.ring.setPosition(new cc.Point(this.ring.x,this.ring.y));
 	this.scoreLabel.setString(this.score);
-	if(this.life == 0) this.gameOver();
+	if(this.life <= 0) this.gameOver();
 
     }
 
