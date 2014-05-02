@@ -15,7 +15,8 @@
             'src/GameLayer.js',     //add your own files in order here
 		'src/Ring.js',
 		'src/Ball.js',
-		'src/Life.js'
+		'src/Life.js',
+		'src/Background.js'
 	
         ]
     };

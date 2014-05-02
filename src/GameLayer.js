@@ -1,7 +1,9 @@
 var GameLayer = cc.LayerColor.extend({
     init: function() {
-        this._super( new cc.Color4B( 127, 127, 127, 255 ) );
-        this.setPosition( new cc.Point( 0, 0 ) );
+        this._super();
+	this.background = new Background();
+	this.addChild(this.background);
+
 	this.setKeyboardEnabled(true);
 	this.setMouseEnabled(true);
 	this.scheduleUpdate();
@@ -17,7 +19,7 @@ var GameLayer = cc.LayerColor.extend({
 	this.scoreLabel.setPosition(new cc.Point(700,500));
 	this.addChild(this.scoreLabel);
 	this.combo = 0;
-	this.comboLabel = cc.LabelTTF.create('0','Arial',32);
+	this.comboLabel = cc.LabelTTF.create('0 Combo','Arial',32);
 	this.comboLabel.setPosition(new cc.Point(400,500));
 	this.addChild(this.comboLabel);
 
@@ -91,7 +93,7 @@ var GameLayer = cc.LayerColor.extend({
 		    this.combo = 0;
 	    }
 	    this.removeChild(ball);
-	    this.comboLabel.setString(this.combo);
+	    this.comboLabel.setString(this.combo+" Combo");
    	}
     },
 

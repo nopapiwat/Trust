@@ -45,8 +45,8 @@ var Ball = cc.Sprite.extend({
 	},
 
 	randomPos: function(){
-		this.x = Math.random()*750;
-		this.y = parseInt(Math.random())*550;
+		this.x = Math.random()*720+15;
+		this.y = parseInt(Math.random())*520+15;
 	},
 
 	randomDir: function(){
@@ -64,7 +64,7 @@ var Ball = cc.Sprite.extend({
 	},
 
 	checkAxisReflect: function(axis,dir,maxLimit){
-		if(axis <= 0 || axis >= maxLimit){
+		if(axis <= 15 || axis >= maxLimit-15){
 			dir*=-1;
 			this.changeColor();
 			this.velocity+=0.2;
