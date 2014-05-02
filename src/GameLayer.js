@@ -26,6 +26,7 @@ var GameLayer = cc.LayerColor.extend({
 	this.createLifes();
 
 	this.count = 0;
+	this.createRate = 50;
         return true;
     },
 
@@ -98,11 +99,13 @@ var GameLayer = cc.LayerColor.extend({
     },
 
    checkBallCreation: function(){
-	if(this.count%50==0){
+	if(this.count%this.createRate==0){
 		var ball = new Ball();
 		this.addChild(ball);
 		ball.setScreen(this);
-		this.count-=50;
+		this.count=0;
+		this.createRate-=1;
+		if (this.createRate < 20) this.createRate = 20;
 	}
 	this.count+=1;
     },
