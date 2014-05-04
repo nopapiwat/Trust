@@ -18,6 +18,7 @@ var GameLayer = cc.LayerColor.extend({
 	this.scoreLabel = cc.LabelTTF.create('0','Arial',32);
 	this.scoreLabel.setPosition(new cc.Point(700,500));
 	this.addChild(this.scoreLabel);
+	
 	this.combo = 0;
 	this.comboLabel = cc.LabelTTF.create('0 Combo','Arial',32);
 	this.comboLabel.setPosition(new cc.Point(400,500));
@@ -26,7 +27,8 @@ var GameLayer = cc.LayerColor.extend({
 	this.createLifes();
 
 	this.count = 0;
-	this.createRate = 50;
+	this.createRate = 100;
+	this.decreaseRate = 5;
         return true;
     },
 
@@ -104,7 +106,7 @@ var GameLayer = cc.LayerColor.extend({
 		this.addChild(ball);
 		ball.setScreen(this);
 		this.count=0;
-		this.createRate-=1;
+		this.createRate-=Math.round(this.createRate/40*this.createRate/40);
 		if (this.createRate < 20) this.createRate = 20;
 	}
 	this.count+=1;
