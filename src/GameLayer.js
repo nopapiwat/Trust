@@ -27,7 +27,7 @@ var GameLayer = cc.LayerColor.extend({
 	this.createLifes();
 
 	this.count = 0;
-	this.createRate = 100;
+	this.createRate = 150;
 	this.decreaseRate = 5;
         return true;
     },
@@ -83,22 +83,24 @@ var GameLayer = cc.LayerColor.extend({
     },
 
     checkCatching: function(ball){
-	var ballRect = ball.getBoundingBoxToWorld();
-	var ringRect = this.ring.getBoundingBoxToWorld();
-	if( cc.rectIntersectsRect(ballRect,ringRect) ){
-	    if(ball.state == Ball.STATE.BLUE) {
-		    this.score+=ball.getScore();
-		    this.score+=this.combo*20;
-		    this.combo+=1;
-	    }
-	    else {
-		    this.decreaseLifes();
-		    this.combo = 0;
-	    }
-	    this.removeChild(ball);
-	    this.comboLabel.setString(this.combo+" Combo");
-   	}
-    },
+	if (ball.state == Ball.STATE.MOVE){
+		var ballRect = ball.getBoundingBoxToWorld();
+		var ringRect = this.ring.getBoundingBoxToWorld();
+		if( cc.rectIntersectsRect(ballRect,ringRect) ){
+		    if(ball.color == Ball.COLOR.BLUE) {
+			    this.score+=ball.getScore();
+			    this.score+=this.combo*20;
+			    this.combo+=1;
+		    }
+		    else {
+			    this.decreaseLifes();
+			    this.combo = 0;
+		    }
+		    this.removeChild(ball);
+		    this.comboLabel.setString(this.combo+" Combo");
+   		}
+	}
+    },	
 
    checkBallCreation: function(){
 	if(this.count%this.createRate==0){

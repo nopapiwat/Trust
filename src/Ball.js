@@ -8,9 +8,12 @@ var Ball = cc.Sprite.extend({
 
 		this.randomPos();
 		this.randomDir();
-		this.state = Ball.STATE.RED;
+		this.delay = 20;
+		this.state = Ball.STATE.STOP;
+		this.color = Ball.COLOR.RED;
 		this.action = this.redAction;
 		this.runAction(this.action);
+		this.randomColor();
 		this.velocity = 5;
 		this.score = 100;
 
@@ -23,12 +26,12 @@ var Ball = cc.Sprite.extend({
 
     	changeColor: function(){
 		this.stopAction(this.action);
-		if(this.state == Ball.STATE.RED){
+		if(this.color == Ball.COLOR.RED){
 			this.action = this.blueAction;
-			this.state = Ball.STATE.BLUE;
+			this.color = Ball.COLOR.BLUE;
 		}else{
 			this.action = this.redAction;
-			this.state = Ball.STATE.RED;
+			this.color = Ball.COLOR.RED;
 		}
 		this.runAction(this.action);
 	},
@@ -44,16 +47,25 @@ var Ball = cc.Sprite.extend({
 		return cc.RepeatForever.create(cc.Animate.create(anim));
 	},
 
+	randomColor:function(){
+		if (Math.round(Math.random())) this.changeColor();
+	},
+
 	randomPos: function(){
-		this.x = Math.random()*720+15;
-		this.y = parseInt(Math.random())*520+15;
+		var pattern = [Math.random(),Math.round(Math.random())];
+		var randomPat = Math.round(Math.random());
+
+		this.x = pattern[randomPat]*720+15;
+		this.y = pattern[1-randomPat]*520+15;
 	},
 
 	randomDir: function(){
-		this.dirX = Math.floor(Math.random()*10)%2;
-		if(this.dirX==0) this.dirX = -1;
-		this.dirY = Math.floor(Math.random()*10)%2;
-		if(this.dirY==0) this.dirY = -1;
+		if(this.x < 115) this.dirX = 1;
+		else if(this.x > 635) this.dirX = -1;
+		else this.dirX = [-1,1][Math.round(Math.random())];
+		if(this.y < 65) this.dirY = 1;
+		else if(this.y > 485) this.dirY = -1;
+		else this.dirY = [-1,1][Math.round(Math.random())];
 	},
 
 	move: function(){
@@ -78,21 +90,31 @@ var Ball = cc.Sprite.extend({
 		this.dirY = this.checkAxisReflect(this.y,this.dirY,550);
 	},
 
-	checkScreen: function(){
+	checkCatching: function(){
 		this.screen.checkCatching(this);
 	},
 
 	update: function(){
-		this.move();
-		this.checkReflect();
-		this.checkScreen();
+		if(this.delay == 0)
+			this.state = Ball.STATE.MOVE;
+		if(this.state != Ball.STATE.STOP){
+			this.move();
+			this.checkReflect();
+			this.checkCatching();
+		}
 		this.setPosition(new cc.Point(this.x,this.y));
+		this.delay -= 1;
 	}
 
 
 });
 
-Ball.STATE = {
+Ball.COLOR = {
 	RED: 1,
 	BLUE: 0
+};
+
+Ball.STATE = {
+	STOP: 0,
+	MOVE: 1
 };
