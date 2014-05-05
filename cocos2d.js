@@ -16,7 +16,8 @@
 		'src/Ring.js',
 		'src/Ball.js',
 		'src/Life.js',
-		'src/Background.js'
+		'src/Background.js',
+		'src/GameEffect.js'
 	
         ]
     };

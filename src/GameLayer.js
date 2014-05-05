@@ -4,6 +4,9 @@ var GameLayer = cc.LayerColor.extend({
 	this.background = new Background();
 	this.addChild(this.background);
 
+	this.redEffect = new GameEffect();
+	this.addChild(this.redEffect);
+
 	this.setKeyboardEnabled(true);
 	this.setMouseEnabled(true);
 	this.scheduleUpdate();
@@ -93,6 +96,7 @@ var GameLayer = cc.LayerColor.extend({
 			    this.combo+=1;
 		    }
 		    else {
+			    this.redEffect.run();
 			    this.decreaseLifes();
 			    this.combo = 0;
 		    }
