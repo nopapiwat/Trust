@@ -5,7 +5,11 @@ var Ball = cc.Sprite.extend({
 
 		this.redAction = this.genAction('Images/red.png');
 		this.blueAction = this.genAction('Images/blue.png');
+		
+		this.reset();
+	},
 
+	reset: function(){
 		this.randomPos();
 		this.randomDir();
 		this.delay = 20;
@@ -16,7 +20,6 @@ var Ball = cc.Sprite.extend({
 		this.randomColor();
 		this.velocity = 5;
 		this.score = 100;
-
 		this.scheduleUpdate();
 	},
 

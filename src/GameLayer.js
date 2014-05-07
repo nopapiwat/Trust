@@ -31,6 +31,7 @@ var GameLayer = cc.LayerColor.extend({
 	this.ring.scheduleUpdate();
 
 	this.balls = [];
+	this.junk = [];
 
 	this.score = 0;
 	this.scoreLabel = cc.LabelTTF.create('0','Arial',32);
@@ -75,7 +76,7 @@ var GameLayer = cc.LayerColor.extend({
     },
 
     onTouchesMoved: function(pTouch,pEvent){
-    	this.ring.handleMouseMoved(pTouch[0].getLocation());
+   	this.ring.handleMouseMoved(pTouch[0].getLocation());
     },
 
     manageKey: function(key,value){
@@ -135,6 +136,7 @@ var GameLayer = cc.LayerColor.extend({
 		    else
 			    this.handleRed();
 		    this.removeChild(ball);
+		    this.junk.push(ball);
 		    this.comboLabel.setString(this.combo+" Combo");
 	    }
 	    else
@@ -157,7 +159,13 @@ var GameLayer = cc.LayerColor.extend({
 
    checkBallCreation: function(){
 	if(this.count%this.createRate==0){
-		var ball = new Ball();
+		var ball;
+		if(this.junk.length == 0)
+			ball = new Ball();
+		else{
+			ball = this.junk.pop();
+			ball.reset();
+		}
 		this.balls.push(ball);
 		this.addChild(ball);
 		this.count=0;
