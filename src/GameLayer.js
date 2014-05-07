@@ -116,6 +116,7 @@ var GameLayer = cc.LayerColor.extend({
     },
 
     handleRed: function(){
+	cc.AudioEngine.getInstance().playEffect('Sounds/red.mp3');
 	this.redEffect.run();
 	this.decreaseLifes();
 	this.combo = 0;
