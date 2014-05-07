@@ -36,10 +36,6 @@ var Ball = cc.Sprite.extend({
 		this.runAction(this.action);
 	},
 
-	setScreen: function(screen){
-		this.screen = screen;
-	},
-	
     	genAction: function(file){
 		var anim = new cc.Animation.create();
 		anim.addSpriteFrameWithFile(file);
@@ -90,17 +86,12 @@ var Ball = cc.Sprite.extend({
 		this.dirY = this.checkAxisReflect(this.y,this.dirY,550);
 	},
 
-	checkCatching: function(){
-		this.screen.checkCatching(this);
-	},
-
 	update: function(){
 		if(this.delay == 0)
 			this.state = Ball.STATE.MOVE;
 		if(this.state != Ball.STATE.STOP){
 			this.move();
 			this.checkReflect();
-			this.checkCatching();
 		}
 		this.setPosition(new cc.Point(this.x,this.y));
 		this.delay -= 1;

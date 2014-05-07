@@ -1,22 +1,35 @@
 var GameLayer = cc.LayerColor.extend({
     init: function() {
         this._super();
-	this.background = new Background();
-	this.addChild(this.background);
 
-	this.redEffect = new GameEffect();
-	this.addChild(this.redEffect);
+	this.initComponent();
 
 	this.setKeyboardEnabled(true);
 	this.setMouseEnabled(true);
 	this.setTouchEnabled(true);
 	this.scheduleUpdate();
 
+	this.count = 0;
+	this.createRate = 150;
+	this.decreaseRate = 5;
+
+        return true;
+    },
+
+    initComponent: function(){
+	this.background = new Background();
+	this.addChild(this.background);
+
+	this.redEffect = new GameEffect();
+	this.addChild(this.redEffect);
+	
 	this.ring = new Ring();
 	this.addChild(this.ring);
 	this.ring.setLimit(800,600);
 	this.ring.setPosition(400,300);
 	this.ring.scheduleUpdate();
+
+	this.balls = [];
 
 	this.score = 0;
 	this.scoreLabel = cc.LabelTTF.create('0','Arial',32);
@@ -37,11 +50,6 @@ var GameLayer = cc.LayerColor.extend({
 	this.addChild(this.addComboScoreLabel);
 
 	this.createLifes();
-
-	this.count = 0;
-	this.createRate = 150;
-	this.decreaseRate = 5;
-        return true;
     },
 
     createLifes: function(){
@@ -85,9 +93,7 @@ var GameLayer = cc.LayerColor.extend({
 		default:
 			break;
 	    }
-
 	    this.ring.setDirection(tmp,value);
-
     },
 
     onKeyDown: function(e){
@@ -98,39 +104,59 @@ var GameLayer = cc.LayerColor.extend({
     	this.manageKey(e,0);
     },
 
-    checkCatching: function(ball){
-	if (ball.state == Ball.STATE.MOVE){
-		var ballRect = ball.getBoundingBoxToWorld();
-		var ringRect = this.ring.getBoundingBoxToWorld();
-		if( cc.rectIntersectsRect(ballRect,ringRect) ){
-		    if(ball.color == Ball.COLOR.BLUE) {
-			    
-			    var ballScore = ball.getScore();
-			    var comboScore = this.combo*20;
-			    this.addScoreLabel.setString("+"+ballScore);
-			    if(this.combo >= 1)
-			    	this.addComboScoreLabel.setString("+"+(this.combo+1)+"*20");
-			    this.score+=ballScore+comboScore;
-			    this.combo+=1;
+    handleBlue: function(ball){
+	var ballScore = ball.getScore();
+    	var comboScore = this.combo*20;
+    	this.addScoreLabel.setString("+"+ballScore);		    
+	if(this.combo >= 1)
+		this.addComboScoreLabel.setString("+"+(this.combo+1)+"*20");
+    	this.score+=ballScore+comboScore;
+	this.combo+=1;
+    },
+
+    handleRed: function(){
+	this.redEffect.run();
+	this.decreaseLifes();
+	this.combo = 0;
+	this.addScoreLabel.setString("");
+	this.addComboScoreLabel.setString("");
+    },
+
+    checkMovingBallCatching: function(ball){
+	    var ballRect = ball.getBoundingBoxToWorld();
+	    var ringRect = this.ring.getBoundingBoxToWorld();
+	    if( cc.rectIntersectsRect(ballRect,ringRect) ){
+		    if(ball.color == Ball.COLOR.BLUE){
+			    this.handleBlue(ball);
 		    }
-		    else {
-			    this.redEffect.run();
-			    this.decreaseLifes();
-			    this.combo = 0;
-			    this.addScoreLabel.setString("");
-			    this.addComboScoreLabel.setString("");
-		    }
+		    else
+			    this.handleRed();
 		    this.removeChild(ball);
 		    this.comboLabel.setString(this.combo+" Combo");
-   		}
+	    }
+	    else
+		    this.balls.push(ball);
+    },
+
+    checkBallsCatching: function(){
+	var oldBalls = this.balls;
+	this.balls = [];
+	var ballsLength = oldBalls.length;
+	for(var i = 0; i < ballsLength; i++){
+		var ball = oldBalls.pop();
+		if (ball.state == Ball.STATE.MOVE){
+			this.checkMovingBallCatching(ball);
+		}
+		else 
+			this.balls.push(ball);
 	}
-    },	
+    },
 
    checkBallCreation: function(){
 	if(this.count%this.createRate==0){
 		var ball = new Ball();
+		this.balls.push(ball);
 		this.addChild(ball);
-		ball.setScreen(this);
 		this.count=0;
 		this.createRate-=Math.round(this.createRate/40*this.createRate/40);
 		if (this.createRate < 20) this.createRate = 20;
@@ -152,6 +178,7 @@ var GameLayer = cc.LayerColor.extend({
    update: function(dt){
 	this.checkBallCreation();
    	this.ring.setPosition(new cc.Point(this.ring.x,this.ring.y));
+	this.checkBallsCatching();
 	this.scoreLabel.setString(this.score);
 	if(this.life <= 0) this.gameOver();
 
