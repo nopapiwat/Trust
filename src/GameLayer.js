@@ -105,6 +105,7 @@ var GameLayer = cc.LayerColor.extend({
     },
 
     handleBlue: function(ball){
+	cc.AudioEngine.getInstance().playEffect('Sounds/blue.mp3');
 	var ballScore = ball.getScore();
     	var comboScore = this.combo*20;
     	this.addScoreLabel.setString("+"+ballScore);		    
