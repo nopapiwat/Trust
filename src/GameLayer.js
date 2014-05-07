@@ -3,6 +3,7 @@ var GameLayer = cc.LayerColor.extend({
         this._super();
 
 	this.initComponent();
+	cc.AudioEngine.getInstance().playMusic('Sounds/BG.mp3');
 
 	this.setKeyboardEnabled(true);
 	this.setMouseEnabled(true);
@@ -10,7 +11,7 @@ var GameLayer = cc.LayerColor.extend({
 	this.scheduleUpdate();
 
 	this.count = 0;
-	this.createRate = 150;
+	this.createRate = 100;
 	this.decreaseRate = 5;
 
         return true;
