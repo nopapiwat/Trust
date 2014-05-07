@@ -9,7 +9,6 @@ var GameLayer = cc.LayerColor.extend({
 
 	this.setKeyboardEnabled(true);
 	this.setMouseEnabled(true);
-	this.setTouchEnabled(true);
 	this.scheduleUpdate();
 
 	this.ring = new Ring();
@@ -65,10 +64,6 @@ var GameLayer = cc.LayerColor.extend({
     	this.ring.handleMouseMoved(event.getLocation());
     },
 
-    onTouchesMoved: function(pTouch,pEvent){
-    	this.ring.handleMouseMoved(pTouch[0].getLocation());
-    },
-
     manageKey: function(key,value){
 	    var tmp;
 	    switch(key){
@@ -104,12 +99,10 @@ var GameLayer = cc.LayerColor.extend({
 		var ringRect = this.ring.getBoundingBoxToWorld();
 		if( cc.rectIntersectsRect(ballRect,ringRect) ){
 		    if(ball.color == Ball.COLOR.BLUE) {
-			    
 			    var ballScore = ball.getScore();
 			    var comboScore = this.combo*20;
 			    this.addScoreLabel.setString("+"+ballScore);
-			    if(this.combo >= 1)
-			    	this.addComboScoreLabel.setString("+"+(this.combo+1)+"*20");
+			    this.addComboScoreLabel.setString("+"+this.combo+"*20");
 			    this.score+=ballScore+comboScore;
 			    this.combo+=1;
 		    }
@@ -117,8 +110,6 @@ var GameLayer = cc.LayerColor.extend({
 			    this.redEffect.run();
 			    this.decreaseLifes();
 			    this.combo = 0;
-			    this.addScoreLabel.setString("");
-			    this.addComboScoreLabel.setString("");
 		    }
 		    this.removeChild(ball);
 		    this.comboLabel.setString(this.combo+" Combo");
