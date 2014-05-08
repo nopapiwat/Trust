@@ -1,20 +1,36 @@
 var GameLayer = cc.LayerColor.extend({
-    init: function() {
-        this._super();
+
+    ctor: function() {
+	this._super();
 
 	this.initComponent();
-	cc.AudioEngine.getInstance().playMusic('Sounds/BG.mp3');
+	this.balls = [];
+	this.junk = [];
+	this.reset();
 
 	this.setKeyboardEnabled(true);
 	this.setMouseEnabled(true);
 	this.setTouchEnabled(true);
 	this.scheduleUpdate();
+        return true;
+    },
 
+    reset: function(){
+	this.state = GameLayer.STATE.STOP;
+	this.delay = 50;
+	this.life = 3;
+	this.score = 0;
+	this.combo = 0;
 	this.count = 0;
 	this.createRate = 100;
 	this.decreaseRate = 5;
-
-        return true;
+	this.createLifes();
+	this.ring.setPosition(new cc.Point(400,300));
+	while(this.balls.length != 0){
+		var ball = this.balls.pop();
+		this.removeChild(ball);
+		this.junk.push(ball);
+	}
     },
 
     initComponent: function(){
@@ -27,18 +43,12 @@ var GameLayer = cc.LayerColor.extend({
 	this.ring = new Ring();
 	this.addChild(this.ring);
 	this.ring.setLimit(800,600);
-	this.ring.setPosition(400,300);
 	this.ring.scheduleUpdate();
 
-	this.balls = [];
-	this.junk = [];
-
-	this.score = 0;
 	this.scoreLabel = cc.LabelTTF.create('0','Arial',32);
 	this.scoreLabel.setPosition(new cc.Point(700,500));
 	this.addChild(this.scoreLabel);
 	
-	this.combo = 0;
 	this.comboLabel = cc.LabelTTF.create('0 Combo','Arial',32);
 	this.comboLabel.setPosition(new cc.Point(400,500));
 	this.addChild(this.comboLabel);
@@ -50,12 +60,9 @@ var GameLayer = cc.LayerColor.extend({
 	this.addComboScoreLabel = cc.LabelTTF.create('','Arial',20);
 	this.addComboScoreLabel.setPosition(new cc.Point(700,450));
 	this.addChild(this.addComboScoreLabel);
-
-	this.createLifes();
     },
 
     createLifes: function(){
-    	this.life = 3;
 	this.lifes = [];
 	for(var i = 1; i <= this.life; i++){
 		var lifeImage = new Life();
@@ -177,17 +184,27 @@ var GameLayer = cc.LayerColor.extend({
 
    gameOver: function(){
   	var conf = confirm("GAME OVER\nYour score : "+this.score+"\nRetry?");
-	if(conf) location.reload();
+	if(conf) {
+		this.reset();
+	}
 	else this.end();
 	return;
    },
 
    end: function(){
-   	this.unscheduleUpdate();	
+   	this.unscheduleUpdate();
+	location.reload();
    },
 
    update: function(dt){
-	this.checkBallCreation();
+	if (this.state == GameLayer.STATE.START){
+		this.checkBallCreation();
+	}
+	else{
+		this.delay -= 1;
+		console.log(this.delay);
+		if (this.delay == 0) this.state = GameLayer.STATE.START;
+	}
    	this.ring.setPosition(new cc.Point(this.ring.x,this.ring.y));
 	this.checkBallsCatching();
 	this.scoreLabel.setString(this.score);
@@ -197,12 +214,7 @@ var GameLayer = cc.LayerColor.extend({
 
 });
 
-var StartScene = cc.Scene.extend({
-    onEnter: function() {
-        this._super();
-        var layer = new GameLayer();
-        layer.init();
-        this.addChild( layer );
-    }
-});
-
+GameLayer.STATE = {
+	START: 1,
+	STOP: 0
+};

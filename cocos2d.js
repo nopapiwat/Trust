@@ -12,7 +12,9 @@
         engineDir: '../../cocos2d/',
         //SingleEngineFile:'',
         appFiles:[
-            'src/GameLayer.js',     //add your own files in order here
+		'src/StartScene.js',
+		'src/MainLayer.js',
+            	'src/GameLayer.js',     //add your own files in order here
 		'src/Ring.js',
 		'src/Ball.js',
 		'src/Life.js',
